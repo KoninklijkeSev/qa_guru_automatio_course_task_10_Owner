@@ -1,5 +1,7 @@
 package tests;
 
+import config.LocalRemoteConfig;
+import org.aeonbits.owner.ConfigFactory;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
@@ -11,6 +13,9 @@ import static com.codeborne.selenide.Selenide.*;
 import static io.qameta.allure.Allure.step;
 
 public class TestsStudentRegistrationForm extends BaseClass {
+
+    final LocalRemoteConfig config = ConfigFactory.create(LocalRemoteConfig.class, System.getProperties());
+
     Faker faker = new Faker();
     String firstName = faker.name().firstName(),
             lastName = faker.name().lastName(),
@@ -76,6 +81,8 @@ public class TestsStudentRegistrationForm extends BaseClass {
             $("tr:nth-of-type(10) > td:nth-of-type(2)").shouldHave(text(state + " " + city));
             $("#closeLargeModal").click();
         });
+        System.out.println(config.browser());
+        System.out.println(config.version());
     }
 
     @Test
@@ -87,14 +94,8 @@ public class TestsStudentRegistrationForm extends BaseClass {
             $(byText("Practice Form")).shouldHave(text("Practice Form"));
         });
 
-        step("Fill registration form", () -> {
+        step("Fill registration form", () -> $("#submit").click());
 
-            $("#submit").click();
-        });
-
-        step("Check form to successful fill", () -> {
-            $("#closeLargeModal").click();
-        });
+        step("Check form to successful fill", () -> $("#closeLargeModal").click());
     }
-
 }
